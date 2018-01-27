@@ -14,5 +14,12 @@ CHIP Mux {
     OUT out;
 
     PARTS:
-    // Put your code here:
+    
+	Not(in=sel, out=notSel);
+	And(a=a, b=notSel, out=aNotSelCheck);
+	And(a=b, b=sel, out=bSelCheck);
+
+	// The last Or check, to see if a or b are true
+	Or(a=aNotSelCheck, b=bSelCheck, out=out);
+
 }
