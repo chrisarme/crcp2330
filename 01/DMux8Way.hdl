@@ -17,4 +17,53 @@ CHIP DMux8Way {
 
     PARTS:
     // Put your code here:
+
+	Not(in=sel[0],	out=notSel0);
+	Not(in=sel[1],	out=notSel1);
+	Not(in=sel[2],	out=notSel2);
+
+
+	// Make sure a/b can be true (00X)
+	And(a=in, b=notSel0, out=aSel0Check);
+	And(a=in, b=sel[0], out=bSel0Check);
+	And(a=in, b=notSel1, out=abSel1Check);
+	And(a=in, b=notSel2, out=abSel2Check);
+
+	And(a=abSel1Check, b=abSel2Check, out=abSelNumberCheck);
+	And(a=aSel0Check, b=abSelNumberCheck, out=a);
+	And(a=bSel0Check, b=abSelNumberCheck, out=b);
+
+
+	//Make sure c/d can be true (01X)
+	And(a=in, b=notSel0, out=cSel0Check);
+	And(a=in, b=sel[0], out=dSel0Check);
+	And(a=in, b=sel[1], out=cdSel1Check);
+	And(a=in, b=notSel2, out=cdSel2Check);
+
+	And(a=cdSel1Check, b=cdSel2Check, out=cdSelNumberCheck);
+	And(a=cSel0Check, b=cdSelNumberCheck, out=c);
+	And(a=dSel0Check, b=cdSelNumberCheck, out=d);
+
+
+	//Make sure e/f can be true (10X)
+	And(a=in, b=notSel0, out=eSel0Check);
+	And(a=in, b=sel[0], out=fSel0Check);
+	And(a=in, b=notSel1, out=efSel1Check);
+	And(a=in, b=sel[2], out=efSel2Check);
+
+	And(a=efSel1Check, b=efSel2Check, out=efSelNumberCheck);
+	And(a=eSel0Check, b=efSelNumberCheck, out=e);
+	And(a=fSel0Check, b=efSelNumberCheck, out=f);
+
+
+	//Make sure g/h can be true (11X)
+	And(a=in, b=notSel0, out=gSel0Check);
+	And(a=in, b=sel[0], out=hSel0Check);
+	And(a=in, b=sel[1], out=ghSel1Check);
+	And(a=in, b=sel[2], out=ghSel2Check);
+
+	And(a=ghSel1Check, b=ghSel2Check, out=ghSelNumberCheck);
+	And(a=gSel0Check, b=ghSelNumberCheck, out=g);
+	And(a=hSel0Check, b=ghSelNumberCheck, out=h);
+
 }

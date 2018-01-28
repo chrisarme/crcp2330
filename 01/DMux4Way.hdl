@@ -17,4 +17,24 @@ CHIP DMux4Way {
 
     PARTS:
     // Put your code here:
+
+	Not(in=sel[0],	out=notSel0);
+	Not(in=sel[1],	out=notSel1);
+
+	// Make sure a/b can be true
+	And(a=in, b=notSel0, out=aSel0Check);
+	And(a=in, b=sel[0], out=bSel0Check);
+	And(a=in, b=notSel1, out=abSel1Check);
+
+	And(a=aSel0Check, b=abSel1Check, out=a);
+	And(a=bSel0Check, b=abSel1Check, out=b);
+
+	//Make sure c/d can be true
+
+	And(a=in, b=notSel0, out=cSel0Check);
+	And(a=in, b=sel[0], out=dSel0Check);
+	And(a=in, b=sel[1], out=cdSel1Check);
+
+	And(a=cSel0Check, b=cdSel1Check, out=c);
+	And(a=dSel0Check, b=cdSel1Check, out=d);
 }
