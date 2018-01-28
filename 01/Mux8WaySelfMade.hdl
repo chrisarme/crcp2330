@@ -1,0 +1,58 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux4Way16.hdl
+
+/**
+ * 8-way multiplexor:
+ * out = a if sel == 000
+ *       b if sel == 001
+ *       c if sel == 010
+ *       d if sel == 011
+ *       e if sel == 100
+ *		 f if sel == 101
+ *		 g if sel == 110
+ *       h if sel == 111
+ */
+
+CHIP Mux8WaySelfMade {
+    IN a, b, c, d, e, f, g, h, sel[3];
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+
+	Mux(a=a, b=b, sel=sel[0], out=abMux);
+	Mux(a=c, b=d, sel=sel[0], out=cdMux);
+	Mux(a=e, b=f, sel=sel[0], out=efMux);
+	Mux(a=g, b=h, sel=sel[0], out=ghMux);
+
+	Not(in=sel[1], out=notSel1);
+	Not(in=sel[2], out=notSel2);
+
+	// Make sure a/b can be true
+	And(a=abMux, b=notSel1, out=abSel1Compare);
+	And(a=abMux, b=notSel2, out=abSel2Compare);
+	And(a=abSel1Compare, b=abSel2Compare, out=abSelCompare);
+
+	// Make sure c/d can be true
+	And(a=cdMux, b=sel[1], out=cdSel1Compare);
+	And(a=cdMux, b=notSel2, out=cdSel2Compare);
+	And(a=cdSel1Compare, b=cdSel2Compare, out=cdSelCompare);
+
+	// Make sure e/f can be true
+	And(a=efMux, b=notSel1, out=efSel1Compare);
+	And(a=efMux, b=sel[2], out=efSel2Compare);
+	And(a=efSel1Compare, b=efSel2Compare, out=efSelCompare);
+
+	// Make sure g/h can be true
+	And(a=ghMux, b=sel[1], out=ghSel1Compare);
+	And(a=ghMux, b=sel[2], out=ghSel2Compare);
+	And(a=ghSel1Compare, b=ghSel2Compare, out=ghSelCompare);
+
+	// Or() all into out
+	Or(a=abSelCompare, b=cdSelCompare, out=abcdOr);
+	Or(a=efSelCompare, b=ghSelCompare, out=efghOr);
+
+	Or(a=abcdOr, b=efghOr, out=out);
+}
