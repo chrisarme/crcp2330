@@ -43,4 +43,9 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+
+   Not(in=zx, out=notzx);
+
+   Bus16Added(in=notzx, out=out);
+   And16(a=x, b=zx16, out=test);
 }
