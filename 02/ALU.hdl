@@ -44,8 +44,35 @@ CHIP ALU {
     PARTS:
    // Put you code here:
 
+   //Not(in=nx, out=notnx);
+   //Not(in=ny, out=notny);
    Not(in=zx, out=notzx);
+   Not(in=zy, out=notzy);
 
-   Bus16Added(in=notzx, out=out);
-   And16(a=x, b=zx16, out=test);
+   // Find final x value
+   Mux16(a=x, b[0..15]=false, sel=zx, out=xZeroCheck); // This checks if the x input needs to be zeroed, and does so if necessary
+   Not16(in=xZeroCheck, out=notx); // This creates a negated x value in case it needs to be used
+   Mux16(a=xZeroCheck, b=notx, sel=nx, out=xRealValue); // This checks if the notx value needs to be selected for the final x value
+
+   // Find final y value
+   Mux16(a=y, b[0..15]=false, sel=zy, out=yZeroCheck); // This checks if the y input needs to be zeroed, and does so if necessary
+   Not16(in=yZeroCheck, out=noty); // This creates a negated y value in case it needs to be used
+   Mux16(a=yZeroCheck, b=noty, sel=ny, out=yRealValue); // This checks if the noty value needs to be selected for the final y value
+
+   // Figure out if out should be x + y or x & y
+   Add16(a=xRealValue, b=yRealValue, out=xplusy);
+   And16(a=xRealValue, b=yRealValue, out=xandy);
+   Mux16(a=xandy, b=xplusy, sel=f, out=xyFunction);
+
+   // Find if the output should be negated
+   Not16(in=xyFunction, out=notxyFunction);
+   Mux16(a=xyFunction, b=notxyFunction, sel=no, out=selectedxyFunction);
+
+   // Find zr and ng
+   Or16WayAdded(in=selectedxyFunction, out=anyTrue);
+   Not(in=anyTrue, out=zr);
+
+   And16(a=selectedxyFunction, b[0..15]=true, out[15]=ng, out[0..14]=UNCESSESARY);
+   Or16(a=selectedxyFunction, b[0..15]=false, out=out);
+
 }

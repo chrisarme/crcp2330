@@ -1,0 +1,37 @@
+/**
+ * 16-way Or: 
+ * out = (in[0] or in[1] or ... or in[15])
+ */
+
+CHIP Or16WayAdded {
+    IN in[16];
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+
+	// Naming Template: or(Step)(Number)
+
+	// Step 1: 16 > 8
+	Or(a=in[0], b=in[1], out=or11);
+	Or(a=in[2], b=in[3], out=or12);
+	Or(a=in[4], b=in[5], out=or13);
+	Or(a=in[6], b=in[7], out=or14);
+	Or(a=in[8], b=in[9], out=or15);
+	Or(a=in[10], b=in[11], out=or16);
+	Or(a=in[12], b=in[13], out=or17);
+	Or(a=in[14], b=in[15], out=or18);
+	
+	// Step 1: 8 > 4
+	Or(a=or11, b=or12, out=or21);
+	Or(a=or13, b=or14, out=or22);
+	Or(a=or15, b=or16, out=or23);
+	Or(a=or17, b=or18, out=or24);
+
+	// Step 2: 4 > 2
+	Or(a=or21, b=or22, out=or31);
+	Or(a=or23, b=or24, out=or32);
+
+	// Final step: 2 > 1 > output
+	Or(a=or31, b=or32, out=out);
+}
