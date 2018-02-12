@@ -17,4 +17,18 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+
+	Inc16(in=outputOut, out=incOut);
+
+	// Check if need to inc
+	Mux16(a=outputOut, b=incOut, sel=inc, out=incCheck);
+
+	// Check if need to load or pass incCheck
+	Mux16(a=incCheck, b=in, sel=load, out=loadCheck);
+
+	// Check if need to reset or pass loadCheck
+	Mux16(a=loadCheck, b[0..15]=false, sel=reset, out=finalCheck);
+
+	// Save/show data
+	Register(in=finalCheck, load=true, out=out, out=outputOut);
 }

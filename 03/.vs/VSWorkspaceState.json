@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\a"
+    "\\a",
+    "\\b"
   ],
-  "SelectedNode": "\\a\\PC.hdl",
+  "SelectedNode": "\\b\\RAM16K.hdl",
   "PreviewInSolutionExplorer": false
 }
