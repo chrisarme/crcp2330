@@ -8,6 +8,10 @@
 
 // Put your code here.
 
+	// Initialize answer address to 0 first
+	@2
+	M=0
+
 	@0
 	D=M
 	@END
@@ -18,10 +22,8 @@
 	@END
 	D;JEQ
 	
-	@2
-	M=0
-	
-	@1
+	// keep numbers multiplied
+	@1 
 	D=M
 	@3
 	M=D
@@ -31,12 +33,15 @@
 	@0
 	D=M
 	
-	@sum
+	// Answer = answer plus the number
+	@2
 	M=M+D
 	
+	// The number of times this needs to be repeated -= 1
 	@3
 	M=M-1
 	
+	// D needs to equal M because... That is how it works
 	D=M
 	@LOOP
 	D;JGT
