@@ -40,4 +40,23 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+
+	// USE MOST SIGNIFICANT BIT TO DETERMINE A OR C INSTRUCTION
+
+	// NEED TO DECODE INSTRUCTIONS HERE
+	
+
+	Mux16(a=instruction, b=outALU, sel=instruction[15], out=instrALUMux);
+
+	ROM32K(address=instrALUMux, out=outROM)
+
+	ARegister();
+
+	// C INPUTS (c1, c2, c3, c4, c5, c6) FROM INSTRUCTION
+	// need another output that can be used by other chips (outALU)
+	ALU(x=, y=, zx=, nx=, zy=, ny=, f=, no=, out=outM, out=outALU, zr=zrALU, ng=ngALU);
+
+	// COMPARE DESTINATION AND JUMP FOR CORRECT COMMAND
+
+	PC(in=~, load=~, inc=true, reset=reset, out[0..14]=pc);
 }
