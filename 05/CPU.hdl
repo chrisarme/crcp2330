@@ -50,11 +50,15 @@ CHIP CPU {
 
 	ROM32K(address=instrALUMux, out=outROM)
 
-	ARegister();
+	// Compare the opposite of instruction[15] and instruction[5] to see if should change A Register
+	Not(in=instruction[15], out=AorCInstr);
+	Or(a=AorCInstr, b=instruction[5], out=shouldAReg);
+
+	ARegister(in=insrALUMux, load=shouldAReg , out[0..14]=addressM, out=outAReg);
 
 	// C INPUTS (c1, c2, c3, c4, c5, c6) FROM INSTRUCTION
 	// need another output that can be used by other chips (outALU)
-	ALU(x=, y=, zx=, nx=, zy=, ny=, f=, no=, out=outM, out=outALU, zr=zrALU, ng=ngALU);
+	ALU(x=, y=, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=outM, out=outALU, zr=zrALU, ng=ngALU);
 
 	// COMPARE DESTINATION AND JUMP FOR CORRECT COMMAND
 
