@@ -43,24 +43,50 @@ CHIP CPU {
 
 	// USE MOST SIGNIFICANT BIT TO DETERMINE A OR C INSTRUCTION
 
-	// NEED TO DECODE INSTRUCTIONS HERE
-	
-
 	Mux16(a=instruction, b=outALU, sel=instruction[15], out=instrALUMux);
-
-	ROM32K(address=instrALUMux, out=outROM)
 
 	// Compare the opposite of instruction[15] and instruction[5] to see if should change A Register
 	Not(in=instruction[15], out=AorCInstr);
 	Or(a=AorCInstr, b=instruction[5], out=shouldAReg);
 
-	ARegister(in=insrALUMux, load=shouldAReg , out[0..14]=addressM, out=outAReg);
+	ARegister(in=instrALUMux, load=shouldAReg, out[0..14]=addressM, out=outAReg);
+
+	// Another mux with outAReg and inM with the selector of the decoded instructions
+	// sel is instructions[15] (is c instr) and instructions[12] (a = 1)
+	And(a=instruction[15], b=instruction[12], out=AorM);
+	Mux16(a=outAReg, b=inM, sel=AorM, out=inMAndARegMux);
 
 	// C INPUTS (c1, c2, c3, c4, c5, c6) FROM INSTRUCTION
 	// need another output that can be used by other chips (outALU)
-	ALU(x=, y=, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=outM, out=outALU, zr=zrALU, ng=ngALU);
+	ALU(x=outDReg, y=inMAndARegMux, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=outM, out=outALU, zr=zrALU, ng=ngALU);
+
+	//DRegister feedback into ALU
+	// sel is instr[15] (c instr) and instr[4] (D reg is destination)
+	And(a=instruction[15], b=instruction[4], out=isDRegDestination);
+	DRegister(in=outALU, load=isDRegDestination, out=outDReg);
 
 	// COMPARE DESTINATION AND JUMP FOR CORRECT COMMAND
+	// check if postitive number
+	Not(in=ngALU, out=posALU);
+	Not(in=zrALU, out=nzrALU);
+	And(a=posALU, b=nzrALU, out=isNzrPosALU);
 
-	PC(in=~, load=~, inc=true, reset=reset, out[0..14]=pc);
+	// if instr[15] (c) and instr[0] (jump if greater than 0) then JGT
+	And(a=instruction[15], b=instruction[0], out=JGT);
+	And(a=JGT, b=isNzrPosALU, out=jumpCheckJGT);
+
+	// if instr[15] and instr[1] (jump if = 0) then JEQ
+	And(a=instruction[15], b=instruction[1], out=JEQ);
+	And(a=JEQ, b=zrALU, out=jumpCheckJEQ);
+
+	// if instr[15] and instr[2] (jump if less than 0) then JLT
+	And(a=instruction[15], b=instruction[2], out=JLT);
+	And(a=JLT, b=ngALU, out=jumpCheckJLT);
+
+	// check if should jump AT ALL
+	Or(a=jumpCheckJGT, b=jumpCheckJEQ, out=jumpCheck1);
+	Or(a=jumpCheck1, b=jumpCheckJLT, out=jumpCheckFinal);
+
+
+	PC(in=outAReg, load=jumpCheckFinal, inc=true, reset=reset, out[0..14]=pc);
 }
