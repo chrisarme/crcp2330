@@ -65,6 +65,9 @@ CHIP CPU {
 	And(a=instruction[15], b=instruction[4], out=isDRegDestination);
 	DRegister(in=outALU, load=isDRegDestination, out=outDReg);
 
+	// Check if should writeM
+	And(a=instruction[15], b=instruction[3], out=writeM);
+
 	// COMPARE DESTINATION AND JUMP FOR CORRECT COMMAND
 	// check if postitive number
 	Not(in=ngALU, out=posALU);
