@@ -1,0 +1,45 @@
+class Main 
+{
+   function void main() 
+   {
+		var boolean test;
+		var int x;
+		var int y;
+
+		let test = true;
+		let x = 2;
+		let y = 125;
+
+		do Output.printString("This is a fun little test!");
+		do Output.println();      // New line
+
+		while(true)
+		{
+			do Screen.clearScreen();
+
+			do Screen.setColor(true);
+			do Screen.drawRectangle(25, 25, 200, 200);
+
+			do Screen.setColor(false);
+			do Screen.drawRectangle(50, 50, 175, 175);
+
+			do Screen.setColor(true);
+			do Screen.drawRectangle(75, 75, 150, 150);
+
+			if (x > 0)
+			{
+				let x = -1;
+			}
+			else 
+			{
+				let x = 1;
+			}
+
+			do Screen.setColor(false);
+			do Screen.drawRectangle(100 + x, 100, 125 + x, 125);
+
+			do Sys.wait(50);
+		}
+		return;
+   }
+}
