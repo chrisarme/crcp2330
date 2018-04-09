@@ -88,6 +88,8 @@ not
 if-goto WHILE_END1
 call Keyboard.keyPressed 0
 pop local 0
+push constant 0
+pop this 1
 push pointer 0
 call SquareGame.moveSquare 1
 pop temp 0

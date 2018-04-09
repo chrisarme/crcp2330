@@ -53,10 +53,13 @@ class SquareGame {
       
       while (~exit) {
          // waits for a key to be pressed
-         while (key = 0) {
+         while (key = 0) 
+		 {
             let key = Keyboard.keyPressed();
+			let direction = 0;
             do moveSquare();
          }
+
          if (key = 81)  { let exit = true; }     // q key
          if (key = 90)  { do square.decSize(); } // z key
          if (key = 88)  { do square.incSize(); } // x key
