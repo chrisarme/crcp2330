@@ -14,7 +14,7 @@ class Object
 
 	method void drawObject()
 	{
-		do Screen.clearScreen();
+		//do Screen.clearScreen();
 
 		do Screen.setColor(true);
 		do Screen.drawRectangle(25, 25, 200, 200);
@@ -28,32 +28,18 @@ class Object
 		do Screen.setColor(false);
 		do Screen.drawRectangle(x, y, 25 + x, y + 25);
 
-		//do Output.printInt(x);
-
 		return;
 	}
 
 	method void moveObject()
 	{
-		if (direction = 1)
-		{
-			let y = y - 1;
-		}
+		if (direction = 1) { let y = y - 2;	}
 
-		if (direction = 2)
-		{
-			let y = y + 1;
-		}
+		if (direction = 2) { let y = y + 2;	}
 
-		if (direction = 3)
-		{
-			let x = x - 1;
-		}
+		if (direction = 3) { let x = x - 2; }
 
-		if (direction = 4)
-		{
-			let x = x + 1;
-		}
+		if (direction = 4) { let x = x + 2; }
 
 		do Sys.wait(50);
 		do drawObject();

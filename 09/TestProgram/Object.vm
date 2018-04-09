@@ -13,8 +13,6 @@ return
 function Object.drawObject 0
 push argument 0
 pop pointer 0
-call Screen.clearScreen 0
-pop temp 0
 push constant 0
 not
 call Screen.setColor 1
@@ -69,7 +67,7 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push this 2
-push constant 1
+push constant 2
 sub
 pop this 2
 label IF_FALSE0
@@ -80,7 +78,7 @@ if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push this 2
-push constant 1
+push constant 2
 add
 pop this 2
 label IF_FALSE1
@@ -91,7 +89,7 @@ if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
 push this 1
-push constant 1
+push constant 2
 sub
 pop this 1
 label IF_FALSE2
@@ -102,7 +100,7 @@ if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
 push this 1
-push constant 1
+push constant 2
 add
 pop this 1
 label IF_FALSE3
