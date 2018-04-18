@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <bitset>
 #include "Parser.h"
 
 Parser::Parser()
@@ -41,11 +42,61 @@ void Parser::convertToBinary()
 	{
 		if (aLines[i].size() > 0)
 		{
-			if (aLines[i].at(0) == 'D' || aLines[i].at(0) == 'A' || aLines[i].at(0) == 'M')
+			string tempInstr;
+			bool commentExists = false;
+			int commentPosition;
+
+			if (aLines[i].find("//") != string::npos)
 			{
-				bLines.push_back("111");
+				commentExists = true;
+				commentPosition = aLines[i].find("//");
+			}
+
+			if (aLines[i].at(0) == '@')
+			{
+				bool isAIntrNotLabel = true;
+
+				tempInstr = "0";
+
+				for (int d = 1; d < aLines[i].length(); d++)
+				{
+					if (!commentExists || d < commentPosition)
+					{
+						if (!isdigit(aLines[i].at(d)) || aLines[i].at(d) != ' ')
+						{
+							isAIntrNotLabel = false;
+						}
+					}
+				}
+
+				if (isAIntrNotLabel)
+				{
+					long int tempInstrDec;
+
+					if (commentExists)
+					{
+						tempInstrDec = atol(aLines[i].substr(1, aLines[i].length() - (aLines[i].length() - commentPosition) - 1).c_str());
+					}
+					else
+					{
+						tempInstrDec = atol(aLines[i].substr(1, aLines[i].length() - 1).c_str());
+					}
+
+					tempInstr += std::bitset<15>(tempInstrDec).to_string();
+				}
+
+
+				bLines.push_back(tempInstr);
+			}
+			else if (aLines[i].at(0) == 'D' || aLines[i].at(0) == 'A' || aLines[i].at(0) == 'M')
+			{
+				tempInstr = "111";
+
+				bLines.push_back(tempInstr);
 			}
 		}
+
+		//tempInstr = "";
 	}
 
 	for (int i = 0; i < bLines.size(); i++)
