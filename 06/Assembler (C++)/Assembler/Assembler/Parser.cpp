@@ -62,7 +62,7 @@ void Parser::convertToBinary()
 				{
 					if (!commentExists || d < commentPosition)
 					{
-						if (!isdigit(aLines[i].at(d)) || aLines[i].at(d) != ' ')
+						if (!isdigit(aLines[i].at(d)) && aLines[i].at(d) != ' ')
 						{
 							isAIntrNotLabel = false;
 						}
@@ -88,9 +88,91 @@ void Parser::convertToBinary()
 
 				bLines.push_back(tempInstr);
 			}
-			else if (aLines[i].at(0) == 'D' || aLines[i].at(0) == 'A' || aLines[i].at(0) == 'M')
+			//else if (aLines[i].at(0) == 'D' || aLines[i].at(0) == 'A' || aLines[i].at(0) == 'M')
+			else if (aLines[i].find('=') != string::npos || aLines[i].find(';') != string::npos)
 			{
 				tempInstr = "111";
+
+				string compTemp;
+				string destTemp;
+				string jumpTemp;
+				int equalSignPosition = aLines[i].find('=');
+				int semiColonPosition = aLines[i].find(';');
+
+				if (equalSignPosition != string::npos)
+				{
+					string tempSubString = aLines[i].substr(0, equalSignPosition);
+					if (tempSubString.find('A') != string::npos)
+					{
+						destTemp += "1";
+					}
+					else
+					{
+						destTemp += "0";
+					}
+
+					if (tempSubString.find('D') != string::npos)
+					{
+						destTemp += "1";
+					}
+					else
+					{
+						destTemp += "0";
+					}
+
+					if (tempSubString.find('M') != string::npos)
+					{
+						destTemp += "1";
+					}
+					else
+					{
+						destTemp += "0";
+					}
+				}
+				else
+				{
+					destTemp = "000";
+				}
+
+				if (semiColonPosition != string::npos)
+				{
+					string tempSubString = aLines[i].substr(semiColonPosition + 1, aLines[i].length());
+
+					if (tempSubString == "JGT")
+					{
+						jumpTemp = "001";
+					}
+					else if (tempSubString == "JEQ")
+					{
+						jumpTemp = "010";
+					}
+					else if (tempSubString == "JGE")
+					{
+						jumpTemp = "011";
+					}
+					else if (tempSubString == "JLT")
+					{
+						jumpTemp = "100";
+					}
+					else if (tempSubString == "JNE")
+					{
+						jumpTemp = "101";
+					}
+					else if (tempSubString == "JLE")
+					{
+						jumpTemp = "110";
+					}
+					else if (tempSubString == "JMP")
+					{
+						jumpTemp = "111";
+					}
+				}
+				else
+				{
+					jumpTemp = "000";
+				}
+
+				tempInstr += compTemp + destTemp + jumpTemp;
 
 				bLines.push_back(tempInstr);
 			}

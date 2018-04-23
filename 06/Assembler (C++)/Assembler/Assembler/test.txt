@@ -1,9 +1,12 @@
 this
-D
-A
+D=M
+A=D
+
+0;JEQ
 test
 
 @122 // test
+@3131313
 M
 
 test
