@@ -1,5 +1,6 @@
 ﻿  Parser.cpp
-c:\users\chris\documents\github\crcp2330\06\assembler (c++)\assembler\assembler\parser.cpp(41): warning C4018: '<': signed/unsigned mismatch
-c:\users\chris\documents\github\crcp2330\06\assembler (c++)\assembler\assembler\parser.cpp(61): warning C4018: '<': signed/unsigned mismatch
-c:\users\chris\documents\github\crcp2330\06\assembler (c++)\assembler\assembler\parser.cpp(184): warning C4018: '<': signed/unsigned mismatch
+c:\users\chris\documents\github\crcp2330\06\assembler (c++)\assembler\assembler\parser.cpp(27): warning C4018: '<': signed/unsigned mismatch
+c:\users\chris\documents\github\crcp2330\06\assembler (c++)\assembler\assembler\parser.cpp(50): warning C4018: '<': signed/unsigned mismatch
+c:\users\chris\documents\github\crcp2330\06\assembler (c++)\assembler\assembler\parser.cpp(70): warning C4018: '<': signed/unsigned mismatch
+c:\users\chris\documents\github\crcp2330\06\assembler (c++)\assembler\assembler\parser.cpp(290): warning C4018: '<': signed/unsigned mismatch
   Assembler.vcxproj -> C:\Users\chris\Documents\GitHub\crcp2330\06\Assembler (C++)\Assembler\Debug\Assembler.exe

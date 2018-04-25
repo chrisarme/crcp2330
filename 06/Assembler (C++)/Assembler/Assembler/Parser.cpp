@@ -23,7 +23,16 @@ void Parser::getLinesFromFile(string path)
 	{
 		while (getline(openFile, aLineTemp))
 		{
-			aLines.push_back(aLineTemp);
+			string aLine;
+			for (int i = 0; i < aLineTemp.length(); i++)
+			{
+				if (aLineTemp[i] != ' ')
+				{
+					aLine += aLineTemp[i];
+				}
+			}
+
+			aLines.push_back(aLine);
 		}
 	}
 
@@ -99,10 +108,106 @@ void Parser::convertToBinary()
 				int equalSignPosition = aLines[i].find('=');
 				int semiColonPosition = aLines[i].find(';');
 
+				// comp
+				string compTempSubString;
+
 				if (equalSignPosition != string::npos)
 				{
-					string tempSubString = aLines[i].substr(0, equalSignPosition);
-					if (tempSubString.find('A') != string::npos)
+					compTempSubString = aLines[i].substr(equalSignPosition + 1, aLines[i].length());
+				}
+				else if (semiColonPosition != string::npos)
+				{
+					compTempSubString = aLines[i].substr(0, semiColonPosition);
+				}
+
+				// Find if a = 0 or 1
+				if (compTempSubString.find("M") != string::npos)
+				{
+					compTemp = "1";
+				}
+				else
+				{
+					compTemp = "0";
+				}
+
+				if (compTempSubString == "0")
+				{
+					compTemp += "101010";
+				}
+				else if (compTempSubString == "-1")
+				{
+					compTemp += "111010";
+				}
+				else if (compTempSubString == "1")
+				{
+					compTemp += "111111";
+				}
+				else if (compTempSubString == "D")
+				{
+					compTemp += "001100";
+				}
+				else if (compTempSubString == "A" || compTempSubString == "M")
+				{
+					compTemp += "110000";
+				}
+				else if (compTempSubString == "!D")
+				{
+					compTemp += "001101";
+				}
+				else if (compTempSubString == "!A" || compTempSubString == "!M")
+				{
+					compTemp += "110001";
+				}
+				else if (compTempSubString == "-D")
+				{
+					compTemp += "001111";
+				}
+				else if (compTempSubString == "-A" || compTempSubString == "-M")
+				{
+					compTemp += "110011";
+				}
+				else if (compTempSubString == "D+1")
+				{
+					compTemp += "011111";
+				}
+				else if (compTempSubString == "A+1" || compTempSubString == "M+1")
+				{
+					compTemp += "110111";
+				}
+				else if (compTempSubString == "D-1")
+				{
+					compTemp += "001110";
+				}
+				else if (compTempSubString == "A-1" || compTempSubString == "M-1")
+				{
+					compTemp += "110010";
+				}
+				else if (compTempSubString == "D+A" || compTempSubString == "D+M")
+				{
+					compTemp += "000010";
+				}
+				else if (compTempSubString == "D-A" || compTempSubString == "D-M")
+				{
+					compTemp += "010011";
+				}
+				else if (compTempSubString == "A-D" || compTempSubString == "M-D")
+				{
+					compTemp += "000111";
+				}
+				else if (compTempSubString == "D&A" || compTempSubString == "D&M")
+				{
+					compTemp += "000000";
+				}
+				else if (compTempSubString == "D|A" || compTempSubString == "D|M")
+				{
+					compTemp += "010101";
+				}
+
+				// dest
+				if (equalSignPosition != string::npos)
+				{
+					string tempEqSubString = aLines[i].substr(0, equalSignPosition);
+					if (tempEqSubString.find('A') != string::npos)
 					{
 						destTemp += "1";
 					}
@@ -111,7 +216,7 @@ void Parser::convertToBinary()
 						destTemp += "0";
 					}
 
-					if (tempSubString.find('D') != string::npos)
+					if (tempEqSubString.find('D') != string::npos)
 					{
 						destTemp += "1";
 					}
@@ -120,7 +225,7 @@ void Parser::convertToBinary()
 						destTemp += "0";
 					}
 
-					if (tempSubString.find('M') != string::npos)
+					if (tempEqSubString.find('M') != string::npos)
 					{
 						destTemp += "1";
 					}
@@ -134,6 +239,7 @@ void Parser::convertToBinary()
 					destTemp = "000";
 				}
 
+				// jump
 				if (semiColonPosition != string::npos)
 				{
 					string tempSubString = aLines[i].substr(semiColonPosition + 1, aLines[i].length());

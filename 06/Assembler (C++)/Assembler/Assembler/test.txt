@@ -2,6 +2,8 @@ this
 D=M
 A=D
 
+D=M+ 1
+
 0;JEQ
 test
 
