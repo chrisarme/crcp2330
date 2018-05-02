@@ -3,9 +3,51 @@
 #include <bitset>
 #include "Parser.h"
 
+using namespace std;
+
 Parser::Parser()
 {
-	// nothing yet
+	for (int i = 0; i < 16; i++)
+	{
+		string tempString = "R" + i;
+		string tempAddressString = bitset<15>(i).to_string();
+
+		labelsAndPredefined[0].push_back(tempString);
+		labelsAndPredefined[1].push_back(tempAddressString);
+	}
+
+	labelsAndPredefined[0].push_back("SCREEN");
+	labelsAndPredefined[1].push_back(bitset<15>(16384).to_string());
+
+	labelsAndPredefined[0].push_back("KBD");
+	labelsAndPredefined[1].push_back(bitset<15>(24576).to_string());
+
+	labelsAndPredefined[0].push_back("SP");
+	labelsAndPredefined[1].push_back(bitset<15>(0).to_string());
+
+	labelsAndPredefined[0].push_back("LCL");
+	labelsAndPredefined[1].push_back(bitset<15>(1).to_string());
+
+	labelsAndPredefined[0].push_back("ARG");
+	labelsAndPredefined[1].push_back(bitset<15>(2).to_string());
+
+	labelsAndPredefined[0].push_back("THIS");
+	labelsAndPredefined[1].push_back(bitset<15>(3).to_string());
+
+	labelsAndPredefined[0].push_back("THAT");
+	labelsAndPredefined[1].push_back(bitset<15>(4).to_string());
+
+	labelsAndPredefined[0].push_back("WRITE");
+	labelsAndPredefined[1].push_back(bitset<15>(18).to_string());
+
+	labelsAndPredefined[0].push_back("END");
+	labelsAndPredefined[1].push_back(bitset<15>(22).to_string());
+
+	labelsAndPredefined[0].push_back("i");
+	labelsAndPredefined[1].push_back(bitset<15>(16).to_string());
+
+	labelsAndPredefined[0].push_back("sum");
+	labelsAndPredefined[1].push_back(bitset<15>(17).to_string());
 }
 
 void Parser::getLinesFromFile(string path)
@@ -47,6 +89,27 @@ void Parser::getLinesFromFile(string path)
 
 void Parser::convertToBinary()
 {
+	int currentNewLabelAddress = 16;
+	for (int i = 0; i < aLines.size(); i++)
+	{
+		if (aLines[i].front() == '(' && aLines[i].back() == ')')
+		{
+			//int tempInstrDec = atol(aLines[i].substr(1, aLines[i].length() - 2).c_str());
+			for (int j = 0; j < labelsAndPredefined[0].size(); j++)
+			{
+				if (labelsAndPredefined[0][j] == aLines[i].substr(1, aLines[i].length() - 2))
+				{
+					string tempAddressString = std::bitset<15>(currentNewLabelAddress).to_string();
+
+					labelsAndPredefined[0].push_back(aLines[i].substr(1, aLines[i].length() - 2));
+					labelsAndPredefined[1].push_back(tempAddressString);
+
+					currentNewLabelAddress++;
+				}
+			}
+		}
+	}
+
 	for (int i = 0; i < aLines.size(); i++)
 	{
 		if (aLines[i].size() > 0)
@@ -55,13 +118,15 @@ void Parser::convertToBinary()
 			bool commentExists = false;
 			int commentPosition;
 
+
+
 			if (aLines[i].find("//") != string::npos)
 			{
 				commentExists = true;
 				commentPosition = aLines[i].find("//");
 			}
 
-			if (aLines[i].at(0) == '@')
+			else if (aLines[i].at(0) == '@')
 			{
 				bool isAIntrNotLabel = true;
 
@@ -92,6 +157,26 @@ void Parser::convertToBinary()
 					}
 
 					tempInstr += std::bitset<15>(tempInstrDec).to_string();
+				}
+				else
+				{
+					for (int a = 0; a < labelsAndPredefined[0].size(); a++)
+					{
+						if (commentExists)
+						{
+							if (aLines[i].substr(1, aLines[i].length() - (aLines[i].length() - commentPosition) - 1) == labelsAndPredefined[0][i])
+							{
+								//
+							}
+						}
+						else
+						{
+							if (aLines[i].substr(1, aLines[i].length() - (aLines[i].length()) - 1) == labelsAndPredefined[0][i])
+							{
+
+							}
+						}
+					}
 				}
 
 

@@ -5,6 +5,7 @@ using namespace std;
 
 int main()
 {
+	parser = Parser();
 	parser.getLinesFromFile("test.txt");
 	parser.convertToBinary();
 

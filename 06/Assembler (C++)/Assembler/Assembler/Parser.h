@@ -10,6 +10,7 @@ private:
 	string aLineTemp;
 	vector<string> aLines;
 	vector<string> bLines;
+	vector<string> labelsAndPredefined[2];
 public:
 	Parser();
 	void getLinesFromFile(string path);
